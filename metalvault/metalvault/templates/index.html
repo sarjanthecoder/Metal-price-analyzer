@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="/static/gold.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetalVault | Precious Metals & Jewelry Price Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Your CSS styles remain unchanged... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1419 100%);
+            color: #e8eaf0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Animated gradient background */
+        .hero-gradient {
+            background: linear-gradient(135deg, 
+                rgba(255, 215, 0, 0.15) 0%, 
+                rgba(192, 192, 192, 0.1) 25%,
+                rgba(255, 140, 0, 0.08) 50%,
+                rgba(205, 127, 50, 0.12) 75%,
+                rgba(255, 215, 0, 0.1) 100%);
+            animation: gradientShift 15s ease infinite;
+            background-size: 400% 400%;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Glassmorphism effect */
+        .glass {
+            background: rgba(26, 31, 58, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .glass-light {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Metal color gradients */
+        .gold-gradient {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .silver-gradient {
+            background: linear-gradient(135deg, #C0C0C0 0%, #E8E8E8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .platinum-gradient {
+            background: linear-gradient(135deg, #E5E4E2 0%, #9DA3A8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .copper-gradient {
+            background: linear-gradient(135deg, #B87333 0%, #CD853F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Hover effects */
+        .metal-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .metal-card:hover::before {
+            left: 100%;
+        }
+
+        .metal-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        /* Pulse animation for live indicator */
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0e27;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #FFA500 0%, #FFD700 100%);
+        }
+
+        /* Shimmer loading effect */
+        .shimmer {
+            background: linear-gradient(90deg, 
+                rgba(255, 255, 255, 0.05) 0%, 
+                rgba(255, 255, 255, 0.15) 50%, 
+                rgba(255, 255, 255, 0.05) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Result card animation */
+        .result-enter {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Button glow effect */
+        .btn-glow {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-glow:hover {
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <header class="glass sticky top-0 z-50 border-b border-yellow-500/20">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center shadow-lg">
+                        <svg class="w-7 h-7 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold gold-gradient playfair">MetalVault</h1>
+                        <p class="text-xs text-gray-400">Precious Metals Tracker</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#live-prices" class="text-sm font-medium hover:text-yellow-400 transition">Live Prices</a>
+                    <a href="#search" class="text-sm font-medium hover:text-yellow-400 transition">Search</a>
+                    <a href="#converter" class="text-sm font-medium hover:text-yellow-400 transition">Converter</a>
+                    <div class="flex items-center space-x-2 px-3 py-1.5 glass-light rounded-full">
+                        <div class="w-2 h-2 bg-green-400 rounded-full pulse-dot"></div>
+                        <span class="text-xs font-medium text-green-400">LIVE</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero-gradient py-20 px-6">
+        <div class="container mx-auto text-center">
+            <h2 class="text-5xl md:text-7xl font-bold playfair mb-6">
+                <span class="gold-gradient">Precious Metals</span><br>
+                <span class="text-white">Real-Time Pricing</span>
+            </h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Track live prices of Gold, Silver, Platinum, and more. Make informed decisions with accurate, real-time market data.
+            </p>
+            <button onclick="scrollToSearch()" class="px-8 py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-bold rounded-full btn-glow">
+                Start Tracking
+            </button>
+        </div>
+    </section>
+
+    <section id="live-prices" class="container mx-auto px-6 py-16">
+        <h3 class="text-3xl font-bold playfair mb-10 text-center">
+            <span class="gold-gradient">Live Market Prices</span>
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="live-prices-grid">
+            </div>
+    </section>
+
+    <section id="search" class="container mx-auto px-6 py-16">
+        <div class="glass rounded-3xl p-8 md:p-12 max-w-4xl mx-auto">
+            <h3 class="text-3xl font-bold playfair mb-8 text-center">
+                <span class="gold-gradient">Search Metal Prices</span>
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Metal Type</label>
+                    <select id="metal-select" class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition">
+                        <option value="XAU">Gold (XAU)</option>
+                        <option value="XAG">Silver (XAG)</option>
+                        <option value="XPT">Platinum (XPT)</option>
+                        <option value="XPD">Palladium (XPD)</option>
+                        <option value="XCU">Copper (XCU)</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Currency</label>
+                    <select id="currency-select" class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition">
+                        <option value="USD">USD - US Dollar</option>
+                        <option value="EUR">EUR - Euro</option>
+                        <option value="GBP">GBP - British Pound</option>
+                        <option value="INR">INR - Indian Rupee</option>
+                        <option value="JPY">JPY - Japanese Yen</option>
+                        <option value="AUD">AUD - Australian Dollar</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Weight Unit</label>
+                    <select id="unit-select" class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition">
+                        <option value="oz">Troy Ounce</option>
+                        <option value="gram">Gram</option>
+                        <option value="kg">Kilogram</option>
+                        <option value="tola">Tola</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button id="search-btn" onclick="searchPrice()" class="w-full py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-bold rounded-xl btn-glow">
+                Get Price
+            </button>
+        </div>
+
+        <div id="search-results" class="mt-10 hidden">
+            <div class="glass rounded-3xl p-8 max-w-4xl mx-auto result-enter">
+                <div class="flex items-center justify-between mb-6">
+                    <h4 class="text-2xl font-bold playfair">Price Details</h4>
+                    <span class="px-4 py-2 bg-green-500/20 text-green-400 rounded-full text-sm font-semibold">LIVE DATA</span>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div>
+                            <p class="text-sm text-gray-400 mb-2">Current Price</p>
+                            <p id="result-price" class="text-4xl font-bold gold-gradient playfair">--</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-400 mb-2">24h High</p>
+                                <p id="result-high" class="text-xl font-semibold text-green-400">--</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-400 mb-2">24h Low</p>
+                                <p id="result-low" class="text-xl font-semibold text-red-400">--</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <p class="text-sm text-gray-400 mb-2">24h Change</p>
+                            <div class="flex items-center space-x-3">
+                                <p id="result-change" class="text-2xl font-bold">--</p>
+                                <span id="result-change-pct" class="px-3 py-1 rounded-full text-sm font-semibold">--</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <p class="text-gray-400">Metal</p>
+                                <p id="result-metal" class="font-semibold">--</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-400">Currency</p>
+                                <p id="result-currency" class="font-semibold">--</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-400">Unit</p>
+                                <p id="result-unit" class="font-semibold">--</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-400">Updated</p>
+                                <p id="result-time" class="font-semibold">--</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="converter" class="container mx-auto px-6 py-16">
+        <div class="glass rounded-3xl p-8 md:p-12 max-w-3xl mx-auto">
+            <h3 class="text-3xl font-bold playfair mb-8 text-center">
+                <span class="silver-gradient">Price Converter</span>
+            </h3>
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Amount</label>
+                    <input type="number" id="convert-amount" value="1" min="0" step="0.01" class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition text-lg">
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">From Unit</label>
+                        <select id="convert-from" class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition">
+                            <option value="oz">Troy Ounce</option>
+                            <option value="gram">Gram</option>
+                            <option value="kg">Kilogram</option>
+                            <option value="tola">Tola (11.66g)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">To Unit</label>
+                        <select id="convert-to" class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition">
+                            <option value="gram">Gram</option>
+                            <option value="oz">Troy Ounce</option>
+                            <option value="kg">Kilogram</option>
+                            <option value="tola">Tola (11.66g)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="p-6 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 rounded-xl border border-yellow-500/20">
+                    <p class="text-sm text-gray-400 mb-2">Converted Value</p>
+                    <p id="convert-result" class="text-3xl font-bold gold-gradient playfair">--</p>
+                </div>
+                
+                <button onclick="convertUnits()" class="w-full py-4 bg-gradient-to-r from-gray-600 to-gray-700 text-white font-bold rounded-xl hover:from-gray-500 hover:to-gray-600 transition">
+                    Convert
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="glass border-t border-gray-800 mt-20">
+    <div class="container mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold gold-gradient playfair">MetalVault</h3>
+                </div>
+                <p class="text-gray-400 text-sm max-w-md">
+                    Your trusted source for real-time precious metals pricing. Track gold, silver, platinum, and more with accurate market data.
+                </p>
+
+                <a href="https://github.com/sarjanthecoder" target="_blank" 
+                   style="display:inline-flex; align-items:center; margin-top:15px; text-decoration:none; color:#9CA3AF; transition:color 0.3s;"
+                   onmouseover="this.style.color='#FACC15'" 
+                   onmouseout="this.style.color='#9CA3AF'">
+                    <svg xmlns="http://www.w3.org/2000/svg" 
+                         width="22" height="22" 
+                         fill="currentColor" viewBox="0 0 24 24"
+                         style="margin-right:8px;">
+                        <path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.29 3.438 9.77 8.207 11.36.6.111.793-.26.793-.578 0-.285-.011-1.04-.017-2.04-3.338.725-4.042-1.61-4.042-1.61-.547-1.386-1.334-1.756-1.334-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.84 1.238 1.84 1.238 1.07 1.835 2.808 1.305 3.492.998.108-.775.418-1.305.762-1.606-2.665-.305-5.466-1.333-5.466-5.932 0-1.31.468-2.38 1.236-3.22-.124-.304-.536-1.53.117-3.188 0 0 1.008-.322 3.3 1.23a11.5 11.5 0 016.003 0c2.29-1.552 3.297-1.23 3.297-1.23.655 1.658.243 2.884.119 3.188.77.84 1.235 1.91 1.235 3.22 0 4.61-2.806 5.624-5.478 5.922.43.372.814 1.103.814 2.222 0 1.606-.015 2.903-.015 3.298 0 .32.192.694.8.577C20.565 22.27 24 17.79 24 12.5 24 5.87 18.63.5 12 .5z"/>
+                    </svg>
+                    <span style="font-size:14px;">Follow on GitHub</span>
+                </a>
+            </div>
+            
+            <div>
+                <h4 class="font-semibold mb-4 text-yellow-400">Quick Links</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="#live-prices" class="hover:text-yellow-400 transition">Live Prices</a></li>
+                    <li><a href="#search" class="hover:text-yellow-400 transition">Search Prices</a></li>
+                    <li><a href="#converter" class="hover:text-yellow-400 transition">Unit Converter</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-semibold mb-4 text-yellow-400">Markets</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li>Gold (XAU)</li>
+                    <li>Silver (XAG)</li>
+                    <li>Platinum (XPT)</li>
+                    <li>Palladium (XPD)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="pt-8 border-t border-gray-800 text-center text-sm text-gray-500">
+            <p>&copy; <span id="year"></span> MetalVault. All rights reserved. Data provided for informational purposes only.</p>
+            <p class="mt-2">Do not use for real-time analysis purposes. We are not responsible for any financial losses.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Configuration
+    const API_BASE = ''; // This is correct because Flask serves the page
+  const metals = [
+        { symbol: 'XAU', name: 'Gold', gradient: 'gold-gradient', color: '#FFD700' }
+        // You can add other metals back if you upgrade your API plan
+    ];
+
+    // Unit conversion factors to grams
+    const unitConversions = {
+        oz: 31.1034768,
+        gram: 1,
+        kg: 1000,
+        tola: 11.66
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('year').textContent = new Date().getFullYear();
+        loadLivePrices();
+        setInterval(loadLivePrices, 60000); // Refresh every 60 seconds
+    });
+
+    function scrollToSearch() {
+        document.getElementById('search').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Format currency
+    function formatCurrency(value, currency = 'USD') {
+        if (typeof value !== 'number' || isNaN(value)) return '--';
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: currency,
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(value);
+    }
+
+    // Load live prices for all metals
+    async function loadLivePrices() {
+        const grid = document.getElementById('live-prices-grid');
+        grid.innerHTML = metals.map(metal => `
+            <div class="metal-card glass rounded-2xl p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h4 class="text-2xl font-bold ${metal.gradient} playfair">${metal.name}</h4>
+                        <p class="text-xs text-gray-500">${metal.symbol}/USD</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-3xl font-bold shimmer h-10 rounded-md" id="price-${metal.symbol}"></p>
+                    <div class="flex items-center space-x-2">
+                        <span class="shimmer px-3 py-1 rounded-full text-sm font-semibold h-6 w-20" id="change-${metal.symbol}"></span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs text-gray-400 mt-4">
+                        <div><p>High: <span id="high-${metal.symbol}" class="font-semibold">--</span></p></div>
+                        <div><p>Low: <span id="low-${metal.symbol}" class="font-semibold">--</span></p></div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        // Fetch prices for each metal
+        for (const metal of metals) {
+            fetchMetalPrice(metal.symbol, 'USD', metal.gradient);
+        }
+    }
+
+    // Fetch metal price from backend
+    async function fetchMetalPrice(symbol, currency, gradient) {
+        try {
+            const response = await fetch(`${API_BASE}/api/current-price?symbol=${symbol}&currency=${currency}`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+
+            if (data.error) {
+                console.error(`API Error for ${symbol}:`, data.error);
+                updateMetalCard(symbol, null, gradient);
+                return;
+            }
+
+            updateMetalCard(symbol, data, gradient);
+        } catch (error) {
+            console.error(`Error fetching ${symbol}:`, error);
+            updateMetalCard(symbol, null, gradient);
+        }
+    }
+
+    // Update metal card with data
+    function updateMetalCard(symbol, data, gradient) {
+        const priceEl = document.getElementById(`price-${symbol}`);
+        const changeEl = document.getElementById(`change-${symbol}`);
+        const highEl = document.getElementById(`high-${symbol}`);
+        const lowEl = document.getElementById(`low-${symbol}`);
+
+        if (!data || !priceEl) {
+             if(priceEl) {
+                priceEl.textContent = 'Unavailable';
+                priceEl.className = 'text-3xl font-bold text-gray-500';
+             }
+            return;
+        }
+        
+        priceEl.classList.remove('shimmer', 'h-10', 'rounded-md');
+        priceEl.textContent = formatCurrency(data.price, data.currency);
+        priceEl.className = `text-3xl font-bold ${gradient}`;
+
+        const changePct = data.change_pct || 0;
+        const isPositive = changePct >= 0;
+        
+        changeEl.classList.remove('shimmer', 'h-6', 'w-20');
+        changeEl.textContent = `${isPositive ? '+' : ''}${changePct.toFixed(2)}%`;
+        changeEl.className = `px-3 py-1 rounded-full text-sm font-semibold ${isPositive ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`;
+
+        highEl.textContent = formatCurrency(data.high, data.currency);
+        lowEl.textContent = formatCurrency(data.low, data.currency);
+    }
+
+    // Search for specific metal price
+    async function searchPrice() {
+        const metal = document.getElementById('metal-select').value;
+        const currency = document.getElementById('currency-select').value;
+        const unit = document.getElementById('unit-select').value;
+        const btn = document.getElementById('search-btn');
+        
+        btn.innerHTML = 'Searching...';
+        btn.disabled = true;
+
+        try {
+            const response = await fetch(`${API_BASE}/api/current-price?symbol=${metal}&currency=${currency}`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+
+            if (data.error) {
+                showNotification(`Error: ${data.error}`, 'error');
+                return;
+            }
+
+            displaySearchResults(data, unit);
+        } catch (error) {
+            console.error('Search error:', error);
+            showNotification('Connection error. Please try again.', 'error');
+        } finally {
+            btn.innerHTML = 'Get Price';
+            btn.disabled = false;
+        }
+    }
+
+    // Display search results with the bug fix
+    function displaySearchResults(data, unit) {
+        const resultsDiv = document.getElementById('search-results');
+        const metalNames = { XAU: 'Gold', XAG: 'Silver', XPT: 'Platinum', XPD: 'Palladium', XCU: 'Copper' };
+        
+        const pricePerOunce = data.price;
+        const highPerOunce = data.high;
+        const lowPerOunce = data.low;
+
+        const gramsPerOunce = unitConversions.oz;
+        const pricePerGram = pricePerOunce / gramsPerOunce;
+
+        // Convert all relevant values based on the selected unit
+        const conversionFactor = unitConversions[unit];
+        const convertedPrice = pricePerGram * conversionFactor;
+        const convertedHigh = (highPerOunce / gramsPerOunce) * conversionFactor;
+        const convertedLow = (lowPerOunce / gramsPerOunce) * conversionFactor;
+        
+        document.getElementById('result-price').textContent = formatCurrency(convertedPrice, data.currency);
+        // ✨ BUG FIX: Display high/low based on the converted unit
+        document.getElementById('result-high').textContent = formatCurrency(convertedHigh, data.currency);
+        document.getElementById('result-low').textContent = formatCurrency(convertedLow, data.currency);
+        
+        const change = data.ch || 0;
+        const changePct = data.change_pct || 0;
+        const isPositive = changePct >= 0;
+
+        document.getElementById('result-change').textContent = formatCurrency(change, data.currency).replace('$', '±');
+        document.getElementById('result-change').style.color = isPositive ? '#4ade80' : '#f87171';
+        
+        const changeEl = document.getElementById('result-change-pct');
+        changeEl.textContent = `${isPositive ? '+' : ''}${changePct.toFixed(2)}%`;
+        changeEl.className = `px-3 py-1 rounded-full text-sm font-semibold ${isPositive ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`;
+        
+        document.getElementById('result-metal').textContent = metalNames[data.symbol] || data.symbol;
+        document.getElementById('result-currency').textContent = data.currency;
+        document.getElementById('result-unit').textContent = unit === 'oz' ? 'Troy Ounce' : unit.charAt(0).toUpperCase() + unit.slice(1);
+        document.getElementById('result-time').textContent = new Date().toLocaleTimeString();
+
+        resultsDiv.classList.remove('hidden');
+        resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Convert units
+    function convertUnits() {
+        const amount = parseFloat(document.getElementById('convert-amount').value);
+        const fromUnit = document.getElementById('convert-from').value;
+        const toUnit = document.getElementById('convert-to').value;
+
+        if (isNaN(amount) || amount < 0) {
+            showNotification('Please enter a valid amount', 'error');
+            return;
+        }
+
+        const grams = amount * unitConversions[fromUnit];
+        const result = grams / unitConversions[toUnit];
+
+        const unitNames = {
+            oz: 'Troy Ounces',
+            gram: 'Grams',
+            kg: 'Kilograms',
+            tola: 'Tolas'
+        };
+
+        document.getElementById('convert-result').textContent = 
+            `${result.toFixed(4)} ${unitNames[toUnit]}`;
+    }
+    
+    // Smooth scroll for navigation (unchanged)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Show notification function (unchanged)
+    function showNotification(message, type = 'info') {
+        const colors = {
+            success: 'bg-green-500/20 border-green-500/50 text-green-400',
+            error: 'bg-red-500/20 border-red-500/50 text-red-400',
+            info: 'bg-yellow-500/20 border-yellow-500/50 text-yellow-400'
+        };
+        const notification = document.createElement('div');
+        notification.className = `fixed top-20 right-6 z-50 px-6 py-4 rounded-xl border ${colors[type]} glass backdrop-blur-xl transform transition-all duration-500 translate-x-[120%]`;
+        notification.innerHTML = `<p class="font-medium">${message}</p>`;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.style.transform = 'translateX(0)', 100);
+        setTimeout(() => {
+            notification.style.transform = 'translateX(120%)';
+            setTimeout(() => notification.remove(), 500);
+        }, 3000);
+    }
+</script>
+</body>
+</html>
